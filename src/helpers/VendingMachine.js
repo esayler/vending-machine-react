@@ -72,7 +72,6 @@ export default class VendingMachine {
       this.validateSetSelection(newSelectionValue)
     } catch (e) {
       this._selection = null
-      console.log(e)
     }
   }
 
@@ -195,16 +194,14 @@ export default class VendingMachine {
     }
   }
 
-
   popTreat() {
-    if (this._state === 'validated') {
+    if (this._state === 'validated' && this._selection) {
       this._state = 'vending'
       const itemStock = this._stock[this._selection]
       if (itemStock.length === 0) {
         throw new Error('no stock left')
       }
 
-      // this.clearBalance()
       this._state = 'idle'
       return itemStock.pop()
     } else {

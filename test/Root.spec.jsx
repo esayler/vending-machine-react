@@ -13,18 +13,18 @@ chai.use(chaiEnzyme())
 chai.use(chaiJsx)
 
 var expect = chai.expect
-// let should = chai.should()
+let should = chai.should()
 
-// describe('<Root />', () => {
-//   describe('when loading the root page', () => {
-//     let wrapper
+describe('<Root />', () => {
+  describe('when loading the root page', () => {
+    let wrapper
 
-//     beforeEach(() => {
-//       wrapper = shallow(<Root />)
-//     })
+    beforeEach(() => {
+      wrapper = shallow(<Root />)
+    })
 
-//     it('should show text "React Boilerplate"', () => {
-//       expect(wrapper.find('h1')).to.contain.text('React Boilerplate')
-//     })
-//   })
-// })
+    it('should show text "Vending Machine"', () => {
+      expect(wrapper.find('h1')).to.contain.text('Vending Machine')
+    })
+  })
+})

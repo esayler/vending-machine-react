@@ -186,9 +186,26 @@ describe('VendingMachine', () => {
     })
   })
 
-  describe('validate credits is sufficient for selection', () => {
-    it.skip('', () => {
-      expect(true).to.not.be.ok
+  describe('validateBalance()', () => {
+    let vm
+    beforeEach(() => {
+      vm = new VendingMachine()
+      vm.restock()
+    })
+
+    it('should return true if balance is sufficient', () => {
+      vm.addBalance(100)
+      vm.balance.should.equal(100)
+      vm.selection = 'A1' // price is 75
+      expect(() => vm.validateBalance()).to.not.throw('not enough balance')
+      const rv = vm.validateBalance()
+      expect(rv).to.be.true
+    })
+
+    it('should throw error if balance is not sufficient', () => {
+      vm.selection = 'A1'
+      vm.addBalance(50)
+      expect(() => vm.validateBalance()).to.throw('not enough balance')
     })
   })
 
@@ -207,6 +224,100 @@ describe('VendingMachine', () => {
       treat.should.be.instanceOf(Treat)
       vm.stock['A1'].should.have.lengthOf(9)
       vm.stock['A2'].should.have.lengthOf(10)
+      vm.state.should.equal('idle')
+    })
+  })
+
+  describe('dispenseChange()', () => {
+    let vm
+    beforeEach(() => {
+      vm = new VendingMachine()
+      vm.restock()
+    })
+
+    it('if validated, should return remaining balance and set balance to 0', () => {
+      vm.state = 'validated'
+      vm.balance = 25
+      const change = vm.dispenseChange()
+      change.should.equal(25)
+      vm.balance.should.equal(0)
+      vm.state.should.equal('validated')
+    })
+
+    it('if not validated, should return remaining balance and set balance to 0', () => {
+      vm.state.should.not.equal('validated')
+      vm.balance = 25
+      const change = vm.dispenseChange()
+      change.should.equal(0)
+      vm.balance.should.equal(25)
+      vm.state.should.not.equal('validated')
+    })
+  })
+
+  describe('popTreat()', () => {
+    let vm
+
+    beforeEach(() => {
+      vm = new VendingMachine()
+      vm.restock()
+    })
+
+    it('if selection validated, should return a treat', () => {
+      vm.selection = 'A1'
+      vm.state = 'validated'
+      const treat = vm.popTreat()
+      vm.stock.should.change
+      treat.should.be.an('object')
+      vm.state.should.equal('idle')
+    })
+
+    it('if not validated, should not return a treat', () => {
+      vm.state.should.not.equal('validated')
+      expect(() => vm.popTreat()).to.throw('selection not validated')
+      vm.stock.should.not.change
+    })
+  })
+
+  describe('validateSetSelection()', () => {
+    let vm
+
+    beforeEach(() => {
+      vm = new VendingMachine()
+      vm.restock()
+    })
+
+    it('if selection exists, sets selection and state to "selected"', () => {
+      vm.state.should.not.equal('validated')
+      vm.validateSetSelection('A1')
+      vm.selection.should.equal('A1')
+    })
+
+    it('if selection does not exist, does not set selection, throws error', () => {
+      vm.state.should.not.equal('validated')
+      expect(() => vm.validateSetSelection('Z1')).to.throw('not a valid selection')
+      expect(vm.selection).to.not.equal('Z1')
+      expect(vm.selection).to.be.null
+    })
+  })
+
+  describe('validateStock()', () => {
+    let vm
+
+    beforeEach(() => {
+      vm = new VendingMachine()
+    })
+
+    it('if selection is in stock, return true and don\'t throw error', () => {
+      vm.restock()
+      vm.selection = 'A1'
+      expect(() => vm.validateStock()).to.not.throw('no stock left')
+      const rv =  vm.validateStock()
+      expect(rv).to.equal(true)
+    })
+
+    it('if selection is not in stock, throws error', () => {
+      vm.selection = 'A1'
+      expect(() => vm.validateStock()).to.throw('no stock left')
     })
   })
 })
