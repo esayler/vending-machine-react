@@ -10,16 +10,16 @@ chai.use(chaiJsx)
 
 var expect = chai.expect
 
-describe('<About />', () => {
-  describe('when visiting the about page', () => {
-    let wrapper
+// describe('<About />', () => {
+//   describe('when visiting the about page', () => {
+//     let wrapper
 
-    beforeEach(() => {
-      wrapper = shallow(<About />)
-    })
+//     beforeEach(() => {
+//       wrapper = shallow(<About />)
+//     })
 
-    it('should show text "About Me"', () => {
-      expect(wrapper.find('p')).to.contain.text('About Me')
-    })
-  })
-})
+//     it('should show text "About Me"', () => {
+//       expect(wrapper.find('p')).to.contain.text('About Me')
+//     })
+//   })
+// })

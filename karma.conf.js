@@ -6,13 +6,15 @@ module.exports = function (config) {
     frameworks: ['mocha', 'chai', 'sinon'],
     files: [
       { pattern: 'test/**/*.spec.jsx', watched: false, serverd: true, included: true },
+      { pattern: 'test/**/*.spec.js', watched: false, serverd: true, included: true },
     ],
     exclude: [],
     preprocessors: {
-      'test/**/*.jsx': ['webpack', 'sourcemap'],
+      'test/**/*.spec.jsx': ['webpack', 'sourcemap'],
+      'test/**/*.spec.js': ['webpack', 'sourcemap'],
     },
-    webpack: { // kind of a copy of your webpack config
-      devtool: 'source-map', // just do inline source maps instead of the default
+    webpack: {
+      devtool: 'inline-source-map',
       module: webpackConfig.module,
       plugins: webpackConfig.plugins,
       externals: webpackConfig.externals,
@@ -28,9 +30,7 @@ module.exports = function (config) {
         warning: 'black',
         error: 'red',
       },
-      mochaReporter: {
-        showDiff: 'unified',
-      },
+      showDiff: true,
     },
     client: {
       captureConsole: false,

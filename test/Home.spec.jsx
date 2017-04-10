@@ -11,16 +11,16 @@ chai.use(chaiJsx)
 var expect = chai.expect
 // let should = chai.should()
 
-describe('<Home />', () => {
-  describe('when visiting the home page', () => {
-    let wrapper
+// describe('<Home />', () => {
+//   describe('when visiting the home page', () => {
+//     let wrapper
 
-    beforeEach(() => {
-      wrapper = shallow(<Home />)
-    })
+//     beforeEach(() => {
+//       wrapper = shallow(<Home />)
+//     })
 
-    it('should show text "Hello, World!"', () => {
-      expect(wrapper.find('.content')).to.contain.text('Hello, World!')
-    })
-  })
-})
+//     it('should show text "Hello, World!"', () => {
+//       expect(wrapper.find('.content')).to.contain.text('Hello, World!')
+//     })
+//   })
+// })
