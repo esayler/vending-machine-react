@@ -180,35 +180,6 @@ describe('VendingMachine', () => {
     })
   })
 
-  describe('track credits', () => {
-    it.skip('', () => {
-      expect(true).to.not.be.ok
-    })
-  })
-
-  describe('validateBalance()', () => {
-    let vm
-    beforeEach(() => {
-      vm = new VendingMachine()
-      vm.restock()
-    })
-
-    it('should return true if balance is sufficient', () => {
-      vm.addBalance(100)
-      vm.balance.should.equal(100)
-      vm.selection = 'A1' // price is 75
-      expect(() => vm.validateBalance()).to.not.throw('not enough balance')
-      const rv = vm.validateBalance()
-      expect(rv).to.be.true
-    })
-
-    it('should throw error if balance is not sufficient', () => {
-      vm.selection = 'A1'
-      vm.addBalance(50)
-      expect(() => vm.validateBalance()).to.throw('not enough balance')
-    })
-  })
-
   describe('dispensing treats', () => {
     let vm
     beforeEach(() => {
@@ -318,6 +289,52 @@ describe('VendingMachine', () => {
     it('if selection is not in stock, throws error', () => {
       vm.selection = 'A1'
       expect(() => vm.validateStock()).to.throw('no stock left')
+    })
+  })
+
+  describe('validateBalance()', () => {
+    let vm
+    beforeEach(() => {
+      vm = new VendingMachine()
+      vm.restock()
+    })
+
+    it('should return true if balance is sufficient', () => {
+      vm.addBalance(100)
+      vm.balance.should.equal(100)
+      vm.selection = 'A1' // price is 75
+      expect(() => vm.validateBalance()).to.not.throw('not enough balance')
+      const rv = vm.validateBalance()
+      expect(rv).to.be.true
+    })
+
+    it('should throw error if balance is not sufficient', () => {
+      vm.selection = 'A1'
+      vm.addBalance(50)
+      expect(() => vm.validateBalance()).to.throw('not enough balance')
+    })
+  })
+
+  describe('adjustBalance()', () => {
+    let vm
+    beforeEach(() => {
+      vm = new VendingMachine()
+      vm.restock()
+      vm.addBalance(100)
+      vm.selection = 'A1' // price is 75
+    })
+
+    it('should decrement balance if selection is validated', () => {
+      vm.balance.should.equal(100)
+      vm.state = 'validated'
+      vm.adjustBalance()
+      vm.balance.should.equal(25)
+    })
+
+    it('should not decrement balance if slection is not validated', () => {
+      vm.balance.should.equal(100)
+      vm.adjustBalance()
+      vm.balance.should.equal(100)
     })
   })
 })

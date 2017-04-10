@@ -5,10 +5,10 @@ var expect = chai.expect
 chai.should()
 
 
-describe('Person', () => {
+describe('User', () => {
   describe('inital state', () => {
     it.skip('should have a credit balance', () => {
-      // const user = new User()
+
     })
   })
 })
