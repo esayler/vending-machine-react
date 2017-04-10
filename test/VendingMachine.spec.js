@@ -199,9 +199,10 @@ describe('VendingMachine', () => {
       vm.restock()
     })
 
-    it('should remove and return treat from the correct stock', () => {
+    it('should remove and return treat from the correct stock if selection is validated', () => {
       vm.stock['A1'].should.have.lengthOf(10)
       vm.selection = 'A1'
+      vm.state = 'validated'
       const treat = vm.popTreat()
       treat.should.be.instanceOf(Treat)
       vm.stock['A1'].should.have.lengthOf(9)
@@ -211,4 +212,3 @@ describe('VendingMachine', () => {
 })
 
 
-// TODO: test state

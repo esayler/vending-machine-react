@@ -2,7 +2,7 @@ import Treat from './Treat'
 
 export default class VendingMachine {
   constructor() {
-    // status can be ["idle", "credited", "vending"]
+    // status can be ["idle", "credited", 'selected', 'validated', "vending"]
     this._state = 'idle'
     this._balance = 0
     this._change = 0
@@ -85,7 +85,35 @@ export default class VendingMachine {
 
   clearBalance() {
     this._balance = 0
-    this._state = 'idle'
+  }
+
+  adjustBalance() {
+    if (this._state === 'validated') {
+      const itemStock = this._stock[this._selection]
+      const last = itemStock[itemStock.length - 1]
+      const price = last.price
+      this._balance -= price
+    }
+  }
+
+  dispenseChange() {
+    if (this._state === 'validated') {
+      const change = this._balance
+      this.clearBalance()
+      return change
+    } else {
+      return 0
+    }
+  }
+
+  validateSelection() {
+    try {
+      if (this.validateBalance() && this.validateStock()) {
+        this._state = 'validated'
+      }
+    } catch (e) {
+      this._state = 'credited'
+    }
   }
 
   clearStock() {
@@ -144,6 +172,7 @@ export default class VendingMachine {
       throw new Error('not a valid selection')
     } else {
       this._selection = selection
+      this._state = 'selected'
     }
   }
 
@@ -152,6 +181,8 @@ export default class VendingMachine {
     const item = itemStock[itemStock.length - 1]
     if (this._balance < item.price) {
       throw new Error('not enough balance')
+    } else {
+      return true
     }
   }
 
@@ -159,15 +190,25 @@ export default class VendingMachine {
     const itemStock = this._stock[this._selection]
     if (itemStock.length === 0) {
       throw new Error('no stock left')
+    } else {
+      return true
     }
   }
 
-  popTreat() {
-    const itemStock = this._stock[this._selection]
-    if (itemStock.length === 0) {
-      throw new Error('no stock left')
-    }
 
-    return itemStock.pop()
+  popTreat() {
+    if (this._state === 'validated') {
+      this._state = 'vending'
+      const itemStock = this._stock[this._selection]
+      if (itemStock.length === 0) {
+        throw new Error('no stock left')
+      }
+
+      // this.clearBalance()
+      this._state = 'idle'
+      return itemStock.pop()
+    } else {
+      throw new Error('selection not validated')
+    }
   }
 }

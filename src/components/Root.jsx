@@ -23,18 +23,10 @@ const Root = () => (
   <Provider store={store}>
     <ConnectedRouter history={history}>
       <div>
-        <Link to='/' className='hello-link'><h1>React Boilerplate v1.2.0</h1></Link>
-
-        <nav>
-          <Link to='/'>Home</Link>
-          <Link to='/about'>About</Link>
-          <Link to='/missing'>404</Link>
-        </nav>
-
+        <Link to='/' className='hello-link'><h1>Vending Machine</h1></Link>
         <div>
           <Switch>
             <Route exact path='/' component={Home} />
-            <Route path='/about' component={About} />
             <Route component={NotFound} />
           </Switch>
         </div>

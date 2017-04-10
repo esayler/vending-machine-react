@@ -7,8 +7,8 @@ chai.should()
 
 describe('Person', () => {
   describe('inital state', () => {
-    it('should have a credit balance', () => {
-      const user = new User()
+    it.skip('should have a credit balance', () => {
+      // const user = new User()
     })
   })
 })
